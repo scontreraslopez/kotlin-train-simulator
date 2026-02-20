@@ -119,6 +119,46 @@ La primera implementación usa un `StaticEnvironment` que devuelve condiciones u
 
 ---
 
+## TODO / Mejoras pendientes
+
+### Modelo de dominio
+
+- **Repositorio de rutas** — análogo a `TrainRepository`, un `RouteRepository` con rutas predefinidas
+  y sus estaciones. Nótese que `Station` es una agregación dentro de `Route`: las distancias
+  (`approachPoint`, `stopPoint`, `departurePoint`) son posiciones en la ruta, no coordenadas
+  geográficas absolutas.
+
+- **Especialización de estaciones terminales** — para la estación inicial de una ruta no tiene
+  sentido `approachPoint`, ni `departurePoint` para la última. Convendría especializar `Station`
+  en `TerminalStation` y `IntermediateStation`, o modelarlo con propiedades opcionales.
+
+### Observadores y presentación
+
+- **Velocidad en km/h en el logger** — `ConsoleLogger` muestra la velocidad en m/s. Usar
+  `train.velocityKmH()` para que la salida sea legible operacionalmente.
+
+- **Visualización ASCII de la ruta** — pintar en una línea la posición del tren y las estaciones,
+  estilo barra de progreso:
+  ```
+  [Madrid]----·-----------[Guadalajara]
+  ```
+
+### Simulación en tiempo real
+
+- **Control de velocidad de simulación** — la simulación actualmente escupe todos los pasos
+  instantáneamente. Añadir un multiplicador de tiempo (`realTimeFactor`) usando corutinas o
+  `Thread.sleep` para poder simular a x1, x10, x100, etc.
+
+### Conducción interactiva
+
+- **Terminal interactiva** — permitir al conductor intervenir en tiempo real desde teclado:
+  - `W` / `S` → aumentar / reducir throttle
+  - `B` → freno de emergencia
+  - `A` → toggle autopiloto / manual
+  - Requiere lectura de input no bloqueante (corutinas o hilo separado).
+
+---
+
 ## Estructura del proyecto
 
 ```

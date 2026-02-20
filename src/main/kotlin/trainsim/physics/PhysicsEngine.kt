@@ -44,7 +44,7 @@ object PhysicsEngine {
         // F = m * a  =>  a = F / m
         val acceleration = netForce / (train.mass * train.rotatingMassFactor)
         // Integración semi-implícita de Euler. La que más me gusta es la del promedio, pero esta simplifica el tema de detener el tren.
-        (train.velocity + acceleration * dt).coerceIn(0.0, train.maxSpeed)
+        train.velocity = (train.velocity + acceleration * dt).coerceIn(0.0, train.maxSpeed)
         // Limitar la velocidad a maxSpeed y no permitir velocidades negativas
         train.position += train.velocity * dt
     }

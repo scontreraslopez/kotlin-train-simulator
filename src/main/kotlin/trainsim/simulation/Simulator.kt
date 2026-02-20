@@ -15,13 +15,14 @@ class Simulator(
     private var simulationTime: Double = 0.0
 
     fun run() {
-        while (!scenario.isCompleted(train)) {
+        while (!scenario.isCompleted(train) && simulationTime < config.maxTime) {
             val conditions = scenario.environment.conditionsAt(train.position)
             val command = driver.drive(train, conditions)
             PhysicsEngine.step(train, command, conditions, config.timeStep)
             observers.forEach {
                 it.onStep(train, command, conditions, simulationTime)
             }
+            simulationTime += config.timeStep
         }
     }
 
