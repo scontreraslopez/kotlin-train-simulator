@@ -1,20 +1,19 @@
 package io.github.scontreraslopez.trainsim
 
-import io.github.scontreraslopez.trainsim.control.DriveCommand
-import io.github.scontreraslopez.trainsim.control.ManualDriver
 import io.github.scontreraslopez.trainsim.data.ScenarioRepository
 import io.github.scontreraslopez.trainsim.data.TrainRepository
-import io.github.scontreraslopez.trainsim.observer.ConsoleLogger
-import io.github.scontreraslopez.trainsim.simulation.Simulator
+import io.github.scontreraslopez.trainsim.simulation.SimulationFactory
+import io.github.scontreraslopez.trainsim.ui.ConsoleMenu
 
 fun main() {
+    val menu = ConsoleMenu()
+    val factory = SimulationFactory()
 
-    val simulator = Simulator(
-        train = TrainRepository.kirbyPaulTank(),
-        driver = ManualDriver(DriveCommand.FULL_THROTTLE),
-        scenario = ScenarioRepository.madridGuadalajara(),
-        observers = listOf(ConsoleLogger())
-    )
+    val trains = TrainRepository.all()
+    val train = trains[menu.select("Elige un tren:", trains.map { it.name })]
 
-    simulator.run()
+    val scenarios = ScenarioRepository.all()
+    val scenario = scenarios[menu.select("Elige un escenario:", scenarios.map { it.description })]
+
+    factory.create(train, scenario).run()
 }

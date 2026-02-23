@@ -3,6 +3,8 @@ package io.github.scontreraslopez.trainsim.control
 import io.github.scontreraslopez.trainsim.model.Train
 import io.github.scontreraslopez.trainsim.model.TrackSegment
 
+//TODO: Esta clase debe ser implementada.
+
 class AutopilotDriver : Driver {
 
     enum class Phase {

@@ -21,6 +21,7 @@ package io.github.scontreraslopez.trainsim.model
  * @property rotatingMassFactor Factor de masa rotante ξ, adimensional (H6 del README).
  */
 class Train(
+    val name: String,
     var position: Double,
     var velocity: Double,
     val mass: Double,

@@ -19,6 +19,7 @@ object TrainRepository {
      * Datos OpenTTD: 300 hp, 47 t, 64 km/h.
      */
     fun kirbyPaulTank(position: Double = 0.0, velocity: Double = 0.0) = Train(
+        name                = "Kirby Paul Tank",
         position            = position,
         velocity            = velocity,
         mass                = 47_000.0,
@@ -37,6 +38,7 @@ object TrainRepository {
      * Datos OpenTTD: ~600 hp, ~78 t, 112 km/h (estimados).
      */
     fun chaneyJubilee(position: Double = 0.0, velocity: Double = 0.0) = Train(
+        name                = "Chaney \"Jubilee\"",
         position            = position,
         velocity            = velocity,
         mass                = 78_000.0,
@@ -55,6 +57,7 @@ object TrainRepository {
      * Datos OpenTTD: ~4 000 hp, ~150 t, ~120 km/h (estimados).
      */
     fun cs4000(position: Double = 0.0, velocity: Double = 0.0) = Train(
+        name                = "CS 4000",
         position            = position,
         velocity            = velocity,
         mass                = 150_000.0,
@@ -73,6 +76,7 @@ object TrainRepository {
      * Datos OpenTTD: ~6 400 hp, ~240 t, ~160 km/h (estimados).
      */
     fun centennial(position: Double = 0.0, velocity: Double = 0.0) = Train(
+        name                = "Centennial",
         position            = position,
         velocity            = velocity,
         mass                = 240_000.0,
