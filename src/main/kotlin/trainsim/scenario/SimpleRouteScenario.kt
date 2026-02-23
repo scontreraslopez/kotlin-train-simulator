@@ -2,7 +2,6 @@ package io.github.scontreraslopez.trainsim.scenario
 
 import io.github.scontreraslopez.trainsim.model.Route
 import io.github.scontreraslopez.trainsim.model.Train
-import io.github.scontreraslopez.trainsim.simulation.Scenario
 
 class SimpleRouteScenario(
     override val description: String,

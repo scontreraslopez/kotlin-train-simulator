@@ -1,4 +1,4 @@
-package io.github.scontreraslopez.trainsim.simulation
+package io.github.scontreraslopez.trainsim.scenario
 
 import io.github.scontreraslopez.trainsim.model.Route
 import io.github.scontreraslopez.trainsim.model.Train

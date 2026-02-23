@@ -4,6 +4,7 @@ import io.github.scontreraslopez.trainsim.control.Driver
 import io.github.scontreraslopez.trainsim.model.Train
 import io.github.scontreraslopez.trainsim.observer.SimulationObserver
 import io.github.scontreraslopez.trainsim.physics.PhysicsEngine
+import io.github.scontreraslopez.trainsim.scenario.Scenario
 
 class Simulator(
     val train: Train,
