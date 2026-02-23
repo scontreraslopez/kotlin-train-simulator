@@ -1,7 +1,7 @@
 package io.github.scontreraslopez.trainsim.control
 
 import io.github.scontreraslopez.trainsim.model.Train
-import io.github.scontreraslopez.trainsim.physics.TrackConditions
+import io.github.scontreraslopez.trainsim.model.TrackSegment
 
 class AutopilotDriver : Driver {
 
@@ -16,7 +16,7 @@ class AutopilotDriver : Driver {
     var phase: Phase = Phase.STOPPED
         private set
 
-    override fun drive(train: Train, conditions: TrackConditions): DriveCommand {
+    override fun drive(train: Train, segment: TrackSegment): DriveCommand {
         TODO("Not yet implemented")
     }
 }

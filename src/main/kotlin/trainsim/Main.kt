@@ -6,47 +6,46 @@ import io.github.scontreraslopez.trainsim.data.TrainRepository
 import io.github.scontreraslopez.trainsim.model.Route
 import io.github.scontreraslopez.trainsim.model.RouteEntry
 import io.github.scontreraslopez.trainsim.model.Station
+import io.github.scontreraslopez.trainsim.model.TrackSegment
 import io.github.scontreraslopez.trainsim.observer.ConsoleLogger
-import io.github.scontreraslopez.trainsim.physics.StaticEnvironment
 import io.github.scontreraslopez.trainsim.scenario.SimpleRouteScenario
 import io.github.scontreraslopez.trainsim.simulation.Simulator
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 fun main() {
     val madrid = Station(
         name = "Madrid Atocha",
-        approachPoint = 0,
-        stopPoint = 500,
-        departurePoint = 1000,
+        approachDistance = 0,
+        departureDistance = 1_000,
         maxApproachSpeed = 30.0 / 3.6,
         maxDepartureSpeed = 30.0 / 3.6
     )
     val guadalajara = Station(
         name = "Guadalajara",
-        approachPoint = 58_000,
-        stopPoint = 59_000,
-        departurePoint = 60_000,
+        approachDistance = 1_000,
+        departureDistance = 0,
         maxApproachSpeed = 30.0 / 3.6,
         maxDepartureSpeed = 30.0 / 3.6
     )
 
-    // 2. Ruta
     val route = Route(
         listOf(
-            RouteEntry(madrid, 0),
-            RouteEntry(guadalajara, 59_000)
+            RouteEntry(
+                station = madrid,
+                position = 0,
+                segmentToNext = TrackSegment(grade = 0.0, lineSpeedLimit = 200.0 / 3.6)
+            ),
+            RouteEntry(
+                station = guadalajara,
+                position = 59_000
+            )
         )
     )
 
-    // 3. Escenario
     val scenario = SimpleRouteScenario(
         description = "Madrid → Guadalajara",
-        route = route,
-        environment = StaticEnvironment(200.0 / 3.6)
+        route = route
     )
 
-    // 4. Simulación
     val simulator = Simulator(
         train = TrainRepository.kirbyPaulTank(),
         driver = ManualDriver(DriveCommand.FULL_THROTTLE),

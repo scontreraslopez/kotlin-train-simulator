@@ -123,6 +123,12 @@ La primera implementación usa un `StaticEnvironment` que devuelve condiciones u
 
 ### Modelo de dominio
 
+- **Refactor: ¿`TrainRepository` como factory?** — evaluar si `TrainRepository` debería exponer
+  métodos factory (`createKirbyPaulTank(startPosition): Train`) o si conviene separar `TrainSpec`
+  (parámetros físicos inmutables) de `Train` (estado mutable), dejando el repositorio como catálogo
+  de specs y delegando la construcción a un factory. La respuesta depende de si `Train` acaba
+  separando spec y estado como entidades distintas.
+
 - **Repositorio de rutas** — análogo a `TrainRepository`, un `RouteRepository` con rutas predefinidas
   y sus estaciones. Nótese que `Station` es una agregación dentro de `Route`: las distancias
   (`approachPoint`, `stopPoint`, `departurePoint`) son posiciones en la ruta, no coordenadas

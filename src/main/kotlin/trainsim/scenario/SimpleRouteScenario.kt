@@ -2,16 +2,14 @@ package io.github.scontreraslopez.trainsim.scenario
 
 import io.github.scontreraslopez.trainsim.model.Route
 import io.github.scontreraslopez.trainsim.model.Train
-import io.github.scontreraslopez.trainsim.physics.Environment
 import io.github.scontreraslopez.trainsim.simulation.Scenario
 
 class SimpleRouteScenario(
     override val description: String,
-    override val route: Route,
-    override val environment: Environment
+    override val route: Route
 ) : Scenario {
     override fun isCompleted(train: Train): Boolean {
-        val lastStation = route.routeEntries.last().station
-        return train.position >= lastStation.stopPoint
+        val lastEntry = route.routeEntries.last()
+        return train.position >= lastEntry.position
     }
 }

@@ -1,6 +1,7 @@
 package io.github.scontreraslopez.trainsim.physics
 
 import io.github.scontreraslopez.trainsim.control.DriveCommand
+import io.github.scontreraslopez.trainsim.model.TrackSegment
 import io.github.scontreraslopez.trainsim.model.Train
 
 //Singleton sin estado
@@ -9,8 +10,8 @@ object PhysicsEngine {
     private const val G = 9.81 // m/s²
     private const val EPSILON = 0.1 // Para evitar división por cero en la fórmula de tracción
 
-    fun step(train: Train, command: DriveCommand, conditions: TrackConditions, dt: Double) {
-        val netForce = computeNetForce(train, command, conditions)
+    fun step(train: Train, command: DriveCommand, segment: TrackSegment, dt: Double) {
+        val netForce = computeNetForce(train, command, segment)
         integrate(train, netForce, dt)
     }
 
@@ -31,10 +32,10 @@ object PhysicsEngine {
 
     }
 
-    private fun computeNetForce(train: Train, command: DriveCommand, conditions: TrackConditions): Double {
+    private fun computeNetForce(train: Train, command: DriveCommand, segment: TrackSegment): Double {
         val tractionForce = computeTraction(train, command.throttle)
         val brakingForce = command.brake * train.maxBrakingForce
-        val gradeForce = computeGradeForce(train, conditions.grade)
+        val gradeForce = computeGradeForce(train, segment.grade)
         val davisResistance = computeDavisResistance(train)
 
         return tractionForce - brakingForce - gradeForce - davisResistance
