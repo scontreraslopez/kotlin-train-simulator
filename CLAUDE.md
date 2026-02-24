@@ -43,7 +43,7 @@ Driver.drive(train, segment) ──→ DriveCommand
 - **`simulation/`** — `Simulator`, `SimulationConfig` (timeStep, maxTime).
 - **`observer/`** — `SimulationObserver` (interface), `ConsoleLogger`, `CsvExporter` (pendiente), `ArrivalChecker` (pendiente).
 - **`scenario/`** — `Scenario` (interface) y sus implementaciones concretas: `SimpleRouteScenario`, `HeavyLoadScenario` (pendiente), `ScenarioFactory` (pendiente).
-- **`data/`** — `TrainRepository` (catálogo OpenTTD: Kirby Paul Tank, Chaney Jubilee, CS 4000, Centennial) y `RouteRepository` (Cercanías C-1 Murcia–Alicante, 11 estaciones), ambos `object`.
+- **`data/`** — `TrainRepository` (catálogo OpenTTD: Kirby Paul Tank, Chaney Jubilee, CS 4000, Centennial), `RouteRepository` (Cercanías C-1 Murcia–Alicante, 11 estaciones) y `ScenarioRepository` (escenarios predefinidos). Los tres son `class` instanciadas en el Composition Root (`Main.kt`).
 
 ---
 
@@ -51,7 +51,7 @@ Driver.drive(train, segment) ──→ DriveCommand
 
 - **Unidades internas siempre en SI** (m, m/s, N, kg). Las conversiones solo en getters de presentación o en los repositorios al definir valores (`200.0 / 3.6`).
 - **`grade` siempre en permil (‰)**, no en porcentaje. Anotado en todos los sitios donde aparece.
-- `data class` para value objects (`TrackSegment`, `DriveCommand`, `SimulationConfig`). `class` para servicios con comportamiento (`Simulator`). `object` para singletons sin estado (`PhysicsEngine`, `TrainRepository`, `RouteRepository`).
+- `data class` para value objects (`TrackSegment`, `DriveCommand`, `SimulationConfig`). `class` para servicios con comportamiento y para cualquier clase con dependencias inyectables (`Simulator`, `TrainRepository`, `RouteRepository`, `ScenarioRepository`). `object` solo para utilidades sin estado ni dependencias externas (`PhysicsEngine`, `ConsoleMenu`).
 - `Station` modela posiciones absolutas en la ruta (no coordenadas geográficas). `approachPoint < stopPoint < departurePoint` validado en `init`.
 
 ---

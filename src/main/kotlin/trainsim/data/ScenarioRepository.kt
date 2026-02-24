@@ -13,7 +13,7 @@ import io.github.scontreraslopez.trainsim.scenario.Scenario
  * Cada función devuelve un [Scenario] listo para usar en el [Simulator].
  * El tren y el driver se eligen por separado en el punto de entrada.
  */
-object ScenarioRepository {
+class ScenarioRepository(private val routeRepository: RouteRepository) {
 
     /**
      * Madrid Atocha → Guadalajara.
@@ -54,7 +54,7 @@ object ScenarioRepository {
      */
     fun cercaniasMurciaAlicante(): Scenario = SimpleRouteScenario(
         description = "Cercanías C-1: Murcia del Carmen → Alacant/Alicante Terminal (75 km)",
-        route = RouteRepository.cercaniasMurciaAlicanteC1
+        route = routeRepository.cercaniasMurciaAlicanteC1
     )
 
     fun all(): List<Scenario> = listOf(madridGuadalajara(), cercaniasMurciaAlicante())

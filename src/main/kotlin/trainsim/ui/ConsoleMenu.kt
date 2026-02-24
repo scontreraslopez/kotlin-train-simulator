@@ -7,7 +7,12 @@ package io.github.scontreraslopez.trainsim.ui
  * e índices. El llamador es responsable de mapear el índice devuelto
  * al objeto de dominio correspondiente.
  */
-class ConsoleMenu {
+object ConsoleMenu {
+
+    fun greet() {
+        println("¡Bienvenido al simulador de trenes!")
+        println("Selecciona un tren y un escenario para comenzar la simulación.")
+    }
 
     /**
      * Muestra [options] numeradas y espera una selección válida del usuario.

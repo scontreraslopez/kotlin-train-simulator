@@ -14,7 +14,7 @@ import io.github.scontreraslopez.trainsim.model.Station
  * estación. Las terminales usan approachDistance = 0 (origen) o
  * departureDistance = 0 (destino) según corresponda.
  */
-object RouteRepository {
+class RouteRepository {
 
     /**
      * Cercanías C-1: Murcia del Carmen → Alacant/Alicante Terminal.

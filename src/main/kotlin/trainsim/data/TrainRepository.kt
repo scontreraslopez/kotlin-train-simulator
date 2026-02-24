@@ -11,7 +11,7 @@ import io.github.scontreraslopez.trainsim.model.Train
  * Davis calibrado para que la resistencia aerodinámica sea realista por tipo de vehículo.
  * El límite de velocidad se impone como tope mecánico en el integrador (no por equilibrio Davis).
  */
-object TrainRepository {
+class TrainRepository {
 
     /**
      * Kirby Paul Tank — vapor, 1925.
