@@ -1,8 +1,7 @@
 package io.github.scontreraslopez.trainsim.simulation
 
-import io.github.scontreraslopez.trainsim.control.DriveCommand
+import io.github.scontreraslopez.trainsim.control.AutopilotDriver
 import io.github.scontreraslopez.trainsim.control.Driver
-import io.github.scontreraslopez.trainsim.control.ManualDriver
 import io.github.scontreraslopez.trainsim.model.Train
 import io.github.scontreraslopez.trainsim.observer.ConsoleLogger
 import io.github.scontreraslopez.trainsim.observer.SimulationObserver
@@ -21,7 +20,7 @@ class SimulationFactory(
     fun create(
         train: Train,
         scenario: Scenario,
-        driver: Driver = ManualDriver(DriveCommand.FULL_THROTTLE)
+        driver: Driver = AutopilotDriver()
     ): Simulator = Simulator(
         train = train,
         driver = driver,

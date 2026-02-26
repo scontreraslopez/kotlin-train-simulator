@@ -3,6 +3,7 @@ package io.github.scontreraslopez.trainsim.data
 import io.github.scontreraslopez.trainsim.model.Route
 import io.github.scontreraslopez.trainsim.model.RouteEntry
 import io.github.scontreraslopez.trainsim.model.Station
+import io.github.scontreraslopez.trainsim.model.TrackSegment
 
 /**
  * Catálogo de rutas predefinidas de Cercanías Renfe.
@@ -42,7 +43,8 @@ class RouteRepository {
                     maxApproachSpeed = 50.0 / 3.6,
                     maxDepartureSpeed = 50.0 / 3.6
                 ),
-                position = 0
+                position = 0,
+                segmentToNext = TrackSegment(grade = 0.0, lineSpeedLimit = 160.0 / 3.6)
             ),
             RouteEntry(
                 station = Station(
@@ -52,7 +54,8 @@ class RouteRepository {
                     maxApproachSpeed = 50.0 / 3.6,
                     maxDepartureSpeed = 50.0 / 3.6
                 ),
-                position = 16_400
+                position = 16_400,
+                segmentToNext = TrackSegment(grade = 0.0, lineSpeedLimit = 160.0 / 3.6)
             ),
             RouteEntry(
                 station = Station(
@@ -62,7 +65,8 @@ class RouteRepository {
                     maxApproachSpeed = 50.0 / 3.6,
                     maxDepartureSpeed = 50.0 / 3.6
                 ),
-                position = 23_400
+                position = 23_400,
+                segmentToNext = TrackSegment(grade = 0.0, lineSpeedLimit = 160.0 / 3.6)
             ),
             RouteEntry(
                 station = Station(
@@ -72,7 +76,8 @@ class RouteRepository {
                     maxApproachSpeed = 50.0 / 3.6,
                     maxDepartureSpeed = 50.0 / 3.6
                 ),
-                position = 30_400
+                position = 30_400,
+                segmentToNext = TrackSegment(grade = 0.0, lineSpeedLimit = 160.0 / 3.6)
             ),
             RouteEntry(
                 station = Station(
@@ -82,7 +87,8 @@ class RouteRepository {
                     maxApproachSpeed = 50.0 / 3.6,
                     maxDepartureSpeed = 50.0 / 3.6
                 ),
-                position = 35_700
+                position = 35_700,
+                segmentToNext = TrackSegment(grade = 0.0, lineSpeedLimit = 160.0 / 3.6)
             ),
             RouteEntry(
                 station = Station(
@@ -92,7 +98,8 @@ class RouteRepository {
                     maxApproachSpeed = 50.0 / 3.6,
                     maxDepartureSpeed = 50.0 / 3.6
                 ),
-                position = 44_700
+                position = 44_700,
+                segmentToNext = TrackSegment(grade = 0.0, lineSpeedLimit = 160.0 / 3.6)
             ),
             RouteEntry(
                 // Zona de salida reducida: Parc está a solo 1,5 km
@@ -103,7 +110,8 @@ class RouteRepository {
                     maxApproachSpeed = 50.0 / 3.6,
                     maxDepartureSpeed = 50.0 / 3.6
                 ),
-                position = 53_500
+                position = 53_500,
+                segmentToNext = TrackSegment(grade = 0.0, lineSpeedLimit = 160.0 / 3.6)
             ),
             RouteEntry(
                 // Zona de aproximación reducida: Carrús está a solo 1,5 km
@@ -114,7 +122,8 @@ class RouteRepository {
                     maxApproachSpeed = 50.0 / 3.6,
                     maxDepartureSpeed = 50.0 / 3.6
                 ),
-                position = 55_000
+                position = 55_000,
+                segmentToNext = TrackSegment(grade = 0.0, lineSpeedLimit = 160.0 / 3.6)
             ),
             RouteEntry(
                 station = Station(
@@ -124,7 +133,8 @@ class RouteRepository {
                     maxApproachSpeed = 50.0 / 3.6,
                     maxDepartureSpeed = 50.0 / 3.6
                 ),
-                position = 64_500
+                position = 64_500,
+                segmentToNext = TrackSegment(grade = 0.0, lineSpeedLimit = 160.0 / 3.6)
             ),
             RouteEntry(
                 // Zona de salida reducida: Terminal está a solo 1,8 km
@@ -135,7 +145,8 @@ class RouteRepository {
                     maxApproachSpeed = 50.0 / 3.6,
                     maxDepartureSpeed = 50.0 / 3.6
                 ),
-                position = 73_200
+                position = 73_200,
+                segmentToNext = TrackSegment(grade = 0.0, lineSpeedLimit = 160.0 / 3.6)
             ),
             RouteEntry(
                 station = Station(

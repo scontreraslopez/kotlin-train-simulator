@@ -1,5 +1,10 @@
 plugins {
     kotlin("jvm") version "2.2.10"
+    application
+}
+
+application {
+    mainClass.set("io.github.scontreraslopez.trainsim.MainKt")
 }
 
 group = "io.github.scontreraslopez"
