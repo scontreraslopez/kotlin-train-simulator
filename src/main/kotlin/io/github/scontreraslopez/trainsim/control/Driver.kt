@@ -1,9 +1,9 @@
 package io.github.scontreraslopez.trainsim.control
 
+import io.github.scontreraslopez.trainsim.model.DrivingContext
 import io.github.scontreraslopez.trainsim.model.Train
-import io.github.scontreraslopez.trainsim.model.TrackSegment
 
-//El driver dice que hacer (DriveCommand) a partir de la situación actual del tren y las condiciones de la via
+// El driver decide qué hacer (DriveCommand) a partir del estado del tren y el contexto de conducción.
 interface Driver {
-    fun drive(train: Train, segment: TrackSegment): DriveCommand
+    fun drive(train: Train, context: DrivingContext): DriveCommand
 }

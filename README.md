@@ -109,69 +109,57 @@ F_g = m · g · sin(θ)  ≈  m · g · (grade‰ / 1000)
 
 ---
 
-#### H7 — Condiciones de vía: entorno estático inicial
+#### H7 — Condiciones de vía: `TrackSegment` estático por tramo
 
-La primera implementación usa un `StaticEnvironment` que devuelve condiciones uniformes en toda la ruta (vía plana, sin curvas).
+Cada par de estaciones consecutivas tiene un único `TrackSegment` con `grade` (‰) y `lineSpeedLimit` constantes para todo el tramo. Las condiciones de vía se resuelven una vez por paso mediante `Route.drivingContextAt(position)`.
 
-**Alternativa:** `DynamicEnvironment` con tramos de pendiente, restricciones temporales de velocidad y radios de curva variables.
+**Alternativa:** `TrackSegment` dinámico con pendiente y límite de velocidad variables por posición dentro del tramo (p. ej. perfil altimétrico real).
 
-**Rationale:** El entorno estático permite validar el motor de física y las estrategias de conducción de forma aislada antes de añadir variabilidad de vía.
+**Rationale:** Un segmento uniforme por tramo permite modelar rutas reales con datos mínimos y valida el motor de física y las estrategias de conducción de forma aislada antes de añadir variabilidad intra-tramo.
 
 ---
 
 ## TODO / Mejoras pendientes
 
+### Control
+
+- **`AutopilotDriver`** — máquina de estados diseñada en `Autopilot.md` (fases: STOPPED / ACCELERATING / CRUISING / BRAKING / COASTING). Es el siguiente TODO prioritario; el `DrivingContext` ya le proporciona toda la información necesaria.
+
+### Observadores y exportación
+
+- **`ArrivalChecker`** — observer que detecta paradas en andén usando `RouteEntry.isInStopZone()` y calcula desviaciones respecto al horario.
+- **`CsvExporter`** — observer que vuelca cada paso a CSV para análisis externo.
+- **Velocidad en km/h en el logger** — `ConsoleLogger` muestra la velocidad en m/s; usar `train.velocityKmH()`.
+
 ### Modelo de dominio
 
-- **Refactor: ¿`TrainRepository` como factory?** — evaluar si `TrainRepository` debería exponer
-  métodos factory (`createKirbyPaulTank(startPosition): Train`) o si conviene separar `TrainSpec`
-  (parámetros físicos inmutables) de `Train` (estado mutable), dejando el repositorio como catálogo
-  de specs y delegando la construcción a un factory. La respuesta depende de si `Train` acaba
-  separando spec y estado como entidades distintas.
+- **Especialización de estaciones terminales** — la estación origen no tiene `approachPoint` y la destino no tiene `departurePoint`. Modelar con `approachDistance = 0` / `departureDistance = 0` ya funciona, pero podría hacerse explícito con subtipos.
+- **`TrackSegment` dinámico** — pendiente y límite de velocidad variables por posición dentro del tramo.
+- **Separar `TrainSpec` de `Train`** — `TrainSpec` como parámetros físicos inmutables (catálogo), `Train` como estado mutable de simulación.
 
-- **Repositorio de rutas** — análogo a `TrainRepository`, un `RouteRepository` con rutas predefinidas
-  y sus estaciones. Nótese que `Station` es una agregación dentro de `Route`: las distancias
-  (`approachPoint`, `stopPoint`, `departurePoint`) son posiciones en la ruta, no coordenadas
-  geográficas absolutas.
+### Escenarios
 
-- **Especialización de estaciones terminales** — para la estación inicial de una ruta no tiene
-  sentido `approachPoint`, ni `departurePoint` para la última. Convendría especializar `Station`
-  en `TerminalStation` y `IntermediateStation`, o modelarlo con propiedades opcionales.
+- **`HeavyLoadScenario`** y **`ScenarioFactory`** — pendientes de implementar.
 
-### Observadores y presentación
+### UX y tiempo real
 
-- **Velocidad en km/h en el logger** — `ConsoleLogger` muestra la velocidad en m/s. Usar
-  `train.velocityKmH()` para que la salida sea legible operacionalmente.
-
-- **Visualización ASCII de la ruta** — pintar en una línea la posición del tren y las estaciones,
-  estilo barra de progreso:
-  ```
-  [Madrid]----·-----------[Guadalajara]
-  ```
-
-### Simulación en tiempo real
-
-- **Control de velocidad de simulación** — la simulación actualmente escupe todos los pasos
-  instantáneamente. Añadir un multiplicador de tiempo (`realTimeFactor`) usando corutinas o
-  `Thread.sleep` para poder simular a x1, x10, x100, etc.
-
-### Conducción interactiva
-
-- **Terminal interactiva** — permitir al conductor intervenir en tiempo real desde teclado:
-  - `W` / `S` → aumentar / reducir throttle
-  - `B` → freno de emergencia
-  - `A` → toggle autopiloto / manual
-  - Requiere lectura de input no bloqueante (corutinas o hilo separado).
+- **Visualización ASCII** — barra de progreso con posición del tren y estaciones: `[Madrid]----·---[Guadalajara]`
+- **`realTimeFactor`** — multiplicador de velocidad de simulación (×1, ×10, ×100) con corutinas o `Thread.sleep`.
+- **Terminal interactiva** — input no bloqueante: `W`/`S` throttle, `B` freno de emergencia, `A` toggle autopiloto/manual.
 
 ---
 
 ## Estructura del proyecto
 
 ```
-model/        → entidades del dominio (Train, Station, Route, RouteEntry)
-physics/      → motor de física (PhysicsEngine, Environment, Davis, ...)
-control/      → lógica de conducción (DriveCommand, Driver, Autopilot)
-simulation/   → bucle de simulación y configuración
-observer/     → logging, CSV export, comprobación de llegadas
-scenario/     → definición de rutas y escenarios de prueba
+model/        → entidades del dominio: Train, Station, Route, RouteEntry,
+                TrackSegment, DrivingContext
+physics/      → PhysicsEngine (object): Davis, tracción hiperbólica, Euler semi-implícito
+control/      → Driver (interface), DriveCommand, ManualDriver, AutopilotDriver
+simulation/   → Simulator (bucle principal), SimulationConfig, SimulationFactory
+observer/     → SimulationObserver (interface), ConsoleLogger
+scenario/     → Scenario (interface), SimpleRouteScenario
+data/         → TrainRepository, RouteRepository, ScenarioRepository  ← Composition Root
+ui/           → ConsoleMenu (object)
+Main.kt       → Composition Root: instancia repos, cablea dependencias y arranca
 ```

@@ -1,7 +1,7 @@
 package io.github.scontreraslopez.trainsim.control
 
+import io.github.scontreraslopez.trainsim.model.DrivingContext
 import io.github.scontreraslopez.trainsim.model.Train
-import io.github.scontreraslopez.trainsim.model.TrackSegment
 
 //TODO: Esta clase debe ser implementada.
 
@@ -18,7 +18,7 @@ class AutopilotDriver : Driver {
     var phase: Phase = Phase.STOPPED
         private set
 
-    override fun drive(train: Train, segment: TrackSegment): DriveCommand {
+    override fun drive(train: Train, context: DrivingContext): DriveCommand {
         TODO("Not yet implemented")
     }
 }

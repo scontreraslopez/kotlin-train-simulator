@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ./gradlew test --tests "io.github.scontreraslopez.trainsim.SomeTest"  # test individual
 ```
 
-Kotlin 2.2.10, JVM toolchain 21, sin dependencias externas salvo `kotlin-test`.
+Kotlin 2.2.10, JVM toolchain 21. Dependencias de test: `junit-jupiter:5.14.3` + `junit-platform-launcher:1.14.3`.
 
 ---
 
@@ -20,15 +20,16 @@ Kotlin 2.2.10, JVM toolchain 21, sin dependencias externas salvo `kotlin-test`.
 El flujo de datos en cada paso de simulación es unidireccional:
 
 ```
-Route.segmentAt(position) ──→ TrackSegment
-                                    │
-Driver.drive(train, segment) ──→ DriveCommand
-                                    │
-         PhysicsEngine.step(train, command, segment, dt)
-                                    │
-                               muta Train
-                                    │
-         SimulationObserver.onStep(train, command, segment, time)
+Route.drivingContextAt(position) ──→ DrivingContext
+                                           │  (segment + distanceToNextStop
+                                           │   + zonas approach/departure/stop)
+Driver.drive(train, context) ──────→ DriveCommand
+                                           │
+    PhysicsEngine.step(train, command, context.segment, dt)
+                                           │
+                                      muta Train
+                                           │
+    SimulationObserver.onStep(train, command, context, time)
 ```
 
 **`Simulator`** orquesta el bucle. Para cuando `Scenario.isCompleted(train)` o se agota `SimulationConfig.maxTime`.
@@ -37,9 +38,9 @@ Driver.drive(train, segment) ──→ DriveCommand
 
 ## Paquetes y responsabilidades
 
-- **`model/`** — entidades del dominio: `Train` (estado mutable + parámetros físicos), `Station`, `Route`, `RouteEntry`, `TrackSegment`. Todo en SI internamente; los getters `*KmH()` y `*Km()` convierten para presentación.
+- **`model/`** — entidades del dominio: `Train` (estado mutable + parámetros físicos), `Station` (con `stopTolerance` ±m), `Route`, `RouteEntry`, `TrackSegment`, `DrivingContext` (value object que agrega el contexto de conducción por paso). Todo en SI internamente; los getters `*KmH()` y `*Km()` convierten para presentación.
 - **`physics/`** — `PhysicsEngine` (object sin estado). El motor implementa Euler semi-implícito con ecuación de Davis, tracción por curva hiperbólica P/v y rampa en ‰.
-- **`control/`** — `Driver` (interface), `DriveCommand` (throttle/brake ∈ [0,1]), `ManualDriver`, `AutopilotDriver` (pendiente).
+- **`control/`** — `Driver` (interface: `drive(train, context): DriveCommand`), `DriveCommand` (throttle/brake ∈ [0,1]), `ManualDriver`, `AutopilotDriver` (pendiente — diseño en `Autopilot.md`).
 - **`simulation/`** — `Simulator`, `SimulationConfig` (timeStep, maxTime).
 - **`observer/`** — `SimulationObserver` (interface), `ConsoleLogger`, `CsvExporter` (pendiente), `ArrivalChecker` (pendiente).
 - **`scenario/`** — `Scenario` (interface) y sus implementaciones concretas: `SimpleRouteScenario`, `HeavyLoadScenario` (pendiente), `ScenarioFactory` (pendiente).
@@ -52,7 +53,8 @@ Driver.drive(train, segment) ──→ DriveCommand
 - **Unidades internas siempre en SI** (m, m/s, N, kg). Las conversiones solo en getters de presentación o en los repositorios al definir valores (`200.0 / 3.6`).
 - **`grade` siempre en permil (‰)**, no en porcentaje. Anotado en todos los sitios donde aparece.
 - `data class` para value objects (`TrackSegment`, `DriveCommand`, `SimulationConfig`). `class` para servicios con comportamiento y para cualquier clase con dependencias inyectables (`Simulator`, `TrainRepository`, `RouteRepository`, `ScenarioRepository`). `object` solo para utilidades sin estado ni dependencias externas (`PhysicsEngine`, `ConsoleMenu`).
-- `Station` modela posiciones absolutas en la ruta (no coordenadas geográficas). `approachPoint < stopPoint < departurePoint` validado en `init`.
+- `Station` modela posiciones absolutas en la ruta (no coordenadas geográficas). `approachPoint < stopPoint < departurePoint` validado en `init`. `stopTolerance` (default 50 m) define el margen de parada válida en andén.
+- `DrivingContext` se construye en cada paso via `Route.drivingContextAt(position)`. Contiene el `TrackSegment` activo, distancia y velocidad de aproximación a la próxima estación, y flags de zona (approach/departure/stop). Es el único argumento de contexto que recibe `Driver.drive()`.
 
 ---
 
@@ -60,11 +62,11 @@ Driver.drive(train, segment) ──→ DriveCommand
 
 Ver sección **TODO / Mejoras pendientes** en `README.md`. Los más estructurales:
 
-- Especialización de `Station` para terminales (sin `approachPoint` inicial / sin `departurePoint` final).
-- `TrackSegment` dinámico con tramos de pendiente y restricciones de velocidad variables por posición.
-- `AutopilotDriver` — pendiente de implementar.
+- `AutopilotDriver` — máquina de estados diseñada en `Autopilot.md` (STOPPED/ACCELERATING/CRUISING/BRAKING/COASTING). Es el siguiente TODO prioritario.
 - `CsvExporter` y `ArrivalChecker` — pendientes de implementar.
 - `HeavyLoadScenario` y `ScenarioFactory` — pendientes de implementar.
+- Especialización de `Station` para terminales (sin `approachPoint` inicial / sin `departurePoint` final).
+- `TrackSegment` dinámico con tramos de pendiente y restricciones de velocidad variables por posición.
 - Control de velocidad de simulación (`realTimeFactor`) con corutinas.
 - Terminal interactiva con input no bloqueante (toggle autopiloto/manual, W/S/B).
 - Visualización ASCII de posición del tren en la ruta.

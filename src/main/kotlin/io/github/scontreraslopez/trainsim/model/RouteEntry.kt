@@ -23,4 +23,7 @@ data class RouteEntry(
         station.departureDistance > 0 && trainPosition in position.toDouble()..departurePoint.toDouble()
 
     fun hasReachedStop(trainPosition: Double) = trainPosition >= position
+
+    fun isInStopZone(trainPosition: Double) =
+        kotlin.math.abs(trainPosition - position) <= station.stopTolerance
 }

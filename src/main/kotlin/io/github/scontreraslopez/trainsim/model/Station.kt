@@ -17,19 +17,23 @@ package io.github.scontreraslopez.trainsim.model
  * @property departureDistance Metros después del stop donde termina la restricción de velocidad de salida.
  * @property maxApproachSpeed Velocidad máxima en m/s en la zona de aproximación.
  * @property maxDepartureSpeed Velocidad máxima en m/s en la zona de salida.
+ * @property stopTolerance Margen en metros alrededor del stopPoint que se considera parada válida (±stopTolerance).
+ *           Modela la longitud útil del andén y la precisión de parada operacional.
  */
 data class Station(
     val name: String,
     val approachDistance: Int,
     val departureDistance: Int,
     val maxApproachSpeed: Double,
-    val maxDepartureSpeed: Double
+    val maxDepartureSpeed: Double,
+    val stopTolerance: Int = 50
 ) {
     init {
         require(approachDistance >= 0) { "approachDistance debe ser no negativa" }
         require(departureDistance >= 0) { "departureDistance debe ser no negativa" }
         require(maxApproachSpeed > 0) { "maxApproachSpeed debe ser positiva" }
         require(maxDepartureSpeed > 0) { "maxDepartureSpeed debe ser positiva" }
+        require(stopTolerance > 0) { "stopTolerance debe ser positiva" }
     }
 
     fun maxApproachSpeedKmH() = maxApproachSpeed * 3.6

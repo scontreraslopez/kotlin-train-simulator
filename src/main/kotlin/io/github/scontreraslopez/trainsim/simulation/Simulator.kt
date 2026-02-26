@@ -17,10 +17,10 @@ class Simulator(
 
     fun run() {
         while (!scenario.isCompleted(train) && simulationTime < config.maxTime) {
-            val segment = scenario.route.segmentAt(train.position) ?: break
-            val command = driver.drive(train, segment)
-            PhysicsEngine.step(train, command, segment, config.timeStep)
-            observers.forEach { it.onStep(train, command, segment, simulationTime) }
+            val context = scenario.route.drivingContextAt(train.position) ?: break
+            val command = driver.drive(train, context)
+            PhysicsEngine.step(train, command, context.segment, config.timeStep)
+            observers.forEach { it.onStep(train, command, context, simulationTime) }
             simulationTime += config.timeStep
         }
     }
