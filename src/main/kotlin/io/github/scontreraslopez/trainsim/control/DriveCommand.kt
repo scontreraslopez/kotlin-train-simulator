@@ -1,5 +1,11 @@
 package io.github.scontreraslopez.trainsim.control
 
+/** Imaginemos el control del tren como una palanca con dos extremos:
+ - En un extremo acelerar al máximo
+ - En otro extremo frenar al máximo
+ - El punto medio es dejar al tren rodar, sin acelerar ni frenar, como cuando no pisas ningún pedal en el coche.
+ */
+
 data class DriveCommand(
     val throttle: Double, // 0.0 to 1.0
     val brake: Double    // 0.0 to 1.0

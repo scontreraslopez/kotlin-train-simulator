@@ -28,7 +28,7 @@ class AutopilotDriver : Driver {
 
         // Transiciones de fase
         phase = when (phase) {
-            Phase.STOPPED -> Phase.ACCELERATING  // salida autorizada inmediata (sin tiempo de andén)
+            Phase.STOPPED -> Phase.ACCELERATING  // salida autorizada inmediata (sin tiempo de andén). Puede ser un punto de extensión para mejorar.
 
             Phase.ACCELERATING -> when {
                 train.velocity >= targetCruisingSpeed -> Phase.CRUISING

@@ -3,13 +3,15 @@ package io.github.scontreraslopez.trainsim.data
 import io.github.scontreraslopez.trainsim.model.Train
 
 /**
- * Catálogo de trenes predefinidos basados en los vehículos del clima Temperate de OpenTTD.
+ * Catálogo de trenes predefinidos.
  *
- * Los datos de potencia y masa son los originales del juego; maxSpeed, Davis y frenado
- * son estimaciones físicamente razonables con fines didácticos.
+ * Incluye vehículos de OpenTTD (clima Temperate) y material rodante real de Renfe.
+ * Para los OpenTTD, la potencia y masa son del juego; el resto son estimaciones físicas.
+ * Para los Renfe, los datos de potencia, masa y velocidad son reales (fuentes Wikipedia /
+ * listadotren.es); Davis y frenado son estimaciones calibradas para fines didácticos.
  *
- * Davis calibrado para que la resistencia aerodinámica sea realista por tipo de vehículo.
- * El límite de velocidad se impone como tope mecánico en el integrador (no por equilibrio Davis).
+ * Criterio Davis: coeficiente C ajustado para que el equilibrio de fuerzas (F_t = F_Davis)
+ * se produzca en torno a maxSpeed. El tope mecánico del integrador actúa como respaldo.
  */
 class TrainRepository {
 
@@ -89,5 +91,49 @@ class TrainRepository {
         davisC              = 12.0,
     )
 
-    fun all(): List<Train> = listOf(kirbyPaulTank(), chaneyJubilee(), cs4000(), centennial())
+    /**
+     * Renfe Serie 592 "Camello" — diésel, 1983. Cercanías y media distancia.
+     * Unidad empleada en la línea Murcia–Alicante (C-1) y otras líneas sin electrificar.
+     * Datos reales: ~412 kW, ~120 km/h. Peso estimado ~55 t (unidad bimotora).
+     * Fuente: listadotren.es / Wikipedia Serie 596 (familia 592/593/596).
+     */
+    fun renfe592Camello(position: Double = 0.0, velocity: Double = 0.0) = Train(
+        name                = "Renfe 592 \"Camello\"",
+        position            = position,
+        velocity            = velocity,
+        mass                = 55_000.0,
+        maxSpeed            = 120.0 / 3.6,      // 33.3 m/s
+        maxPower            = 412_000.0,         // 412 kW (360 CV nominales)
+        maxTractiveEffort   = 80_000.0,          // ~80 kN estimado
+        maxBrakingForce     = 60_000.0,
+        davisA              = 550.0,
+        davisB              = 45.0,
+        davisC              = 2.5,               // equilibrio ~180 km/h → maxSpeed clamp a 120
+    )
+
+    /**
+     * Renfe S-102 "Talgo 350" — eléctrico, 2005. AVE larga distancia.
+     * Datos reales: 8 000 kW, 332 t (vacío) / 357 t (cargado), 330 km/h comercial.
+     * Davis calibrado para equilibrio F_t ≈ F_Davis en torno a 330 km/h:
+     *   C = (P/v_max - A - B·v_max) / v_max² ≈ 8.3 N·s²/m²
+     * Fuente: Wikipedia Renfe Clase 102 / listadotren.es.
+     */
+    fun renfeS102Talgo350(position: Double = 0.0, velocity: Double = 0.0) = Train(
+        name                = "Renfe S-102 Talgo 350",
+        position            = position,
+        velocity            = velocity,
+        mass                = 340_000.0,         // media entre vacío (332 t) y cargado (357 t)
+        maxSpeed            = 330.0 / 3.6,       // 91.7 m/s
+        maxPower            = 8_000_000.0,        // 8 000 kW (2 × 4 000 kW)
+        maxTractiveEffort   = 400_000.0,          // ~400 kN estimado
+        maxBrakingForce     = 500_000.0,          // freno de disco + magnético a alta velocidad
+        davisA              = 3_400.0,
+        davisB              = 150.0,
+        davisC              = 8.3,               // calibrado para equilibrio ~330 km/h
+    )
+
+    fun all(): List<Train> = listOf(
+        kirbyPaulTank(), chaneyJubilee(), cs4000(), centennial(),
+        renfe592Camello(), renfeS102Talgo350()
+    )
 }

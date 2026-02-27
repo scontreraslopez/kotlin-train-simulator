@@ -9,6 +9,12 @@ package io.github.scontreraslopez.trainsim.model
  *   |<-- approachDistance -->|  stopPoint  |<-- departureDistance -->|
  *   approachPoint                    0                        departurePoint
  *
+ * Ambas son valores absolutos (≥ 0) con dirección implícita:
+ * - [approachDistance] se interpreta hacia la izquierda del stopPoint
+ *   (metros anteriores en el sentido de marcha).
+ * - [departureDistance] se interpreta hacia la derecha del stopPoint
+ *   (metros posteriores en el sentido de marcha).
+ *
  * Para estaciones terminales (origen o destino de una ruta) se puede usar
  * approachDistance = 0 o departureDistance = 0 según corresponda.
  *

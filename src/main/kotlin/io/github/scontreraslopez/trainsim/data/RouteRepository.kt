@@ -6,10 +6,10 @@ import io.github.scontreraslopez.trainsim.model.Station
 import io.github.scontreraslopez.trainsim.model.TrackSegment
 
 /**
- * Catálogo de rutas predefinidas de Cercanías Renfe.
+ * Catálogo de rutas predefinidas de Renfe.
  *
  * Distancias reales entre estaciones; velocidades de aproximación/salida
- * estimadas para tráfico regional (50 km/h).
+ * estimadas para tráfico regional (50 km/h). Algún día me pegaré un paseo en tren con el waze abierto para medirlas con más precisión
  *
  * Las distancias de approach/departure son relativas al stopPoint de cada
  * estación. Las terminales usan approachDistance = 0 (origen) o
