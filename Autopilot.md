@@ -4,53 +4,6 @@ Descripción de las transiciones de `AutopilotDriver.Phase` y la lógica de cond
 
 ---
 
-## Diagrama de transiciones
-
-```
-                    ┌─────────────────────────────────────────────────────┐
-                    │                                                     │
-              ┌─────▼──────┐                                             │
-         ┌───►│  STOPPED   │                                             │
-         │    └─────┬──────┘                                             │
-         │          │ salida autorizada                                  │
-         │          ▼                                                     │
-         │    ┌─────────────┐   v >= maxDepartureSpeed                  │
-         │    │ ACCELERATING├──────────────────────────────────┐        │
-         │    └─────┬───────┘   (aún en zona de estación)      │        │
-         │          │                                           │        │
-         │          │ v >= min(speedLimit, train.maxSpeed)      │        │
-         │          │ (en vía abierta)                          ▼        │
-         │          │                                    ┌──────────┐   │
-         │          └───────────────────────────────────►│ CRUISING │   │
-         │                                               └────┬─────┘   │
-         │                                                    │         │
-         │                              d <= brakeDistance    │         │
-         │                              (TBD, ~5 km al stop)  │         │
-         │                                                    ▼         │
-         │                                             ┌──────────┐     │
-         │                                             │  BRAKING │     │
-         │                                             └────┬─────┘     │
-         │                                                  │           │
-         │                          v <= maxApproachSpeed   │           │
-         │                                                  ▼           │
-         │                                           ┌──────────┐       │
-         │                                           │ CRUISING │       │
-         │                                           └────┬─────┘       │
-         │                                               │               │
-         │                          d <= 100 m al stop   │               │
-         │                                               ▼               │
-         │                                        ┌──────────┐          │
-         │                                        │  BRAKING │          │
-         │                                        └────┬─────┘          │
-         │                                             │                 │
-         │                              v ≈ 0 AND      │                 │
-         └─────────────────────────────position ≈ stop─┘                │
-                                                                         │
-         (fin de ruta: última estación) ─────────────────────────────────┘
-```
-
----
-
 ## Estados y acciones
 
 ### STOPPED
